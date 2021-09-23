@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import { Login } from "./pages/login";
+import { Home } from "./pages/home";
 
 const Stack = createStackNavigator();
 
@@ -13,6 +14,11 @@ function MainStack() {
         name="Login"
         options={{ headerShown: false }}
         component={Login}
+      />
+      <Stack.Screen
+        name="Home"
+        options={{ headerShown: false }}
+        component={Home}
       />
     </Stack.Navigator>
   );

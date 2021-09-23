@@ -4,10 +4,16 @@ import { StatusBar } from "react-native";
 
 import Routes from "./routes";
 
+import { colors } from "./config";
+
 export default function App() {
   return (
     <>
-      <StatusBar backgroundColor="#fff" barStyle={"dark-content"} />
+      <StatusBar
+        backgroundColor={colors.primary}
+        translucent
+        barStyle={"light-content"}
+      />
       <Routes logged={true} />
     </>
   );
