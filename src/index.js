@@ -10,7 +10,7 @@ export default function App() {
   return (
     <>
       <StatusBar
-        backgroundColor={colors.primary}
+        backgroundColor={colors.primary_dark}
         translucent
         barStyle={"light-content"}
       />

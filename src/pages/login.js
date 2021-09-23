@@ -10,17 +10,16 @@ import {
   Keyboard,
   KeyboardAvoidingView,
 } from "react-native";
-import { RFValue } from "react-native-responsive-fontsize";
 import { useNavigation } from "@react-navigation/core";
-
-import { colors, W, H } from "../config";
+import { RectButton } from "react-native-gesture-handler";
+import { RFValue } from "react-native-responsive-fontsize";
 
 import api from "../services/api";
-import { RectButton } from "react-native-gesture-handler";
+import { colors, W, H } from "../config";
 
 export function Login() {
-  const [username, setUsername] = useState("teste");
-  const [password, setPassword] = useState("123456");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const inputUsername = createRef();
@@ -37,42 +36,27 @@ export function Login() {
     } else {
       Keyboard.dismiss();
       setLoading(true);
-      //https://api.teste.appit.com.br/login?username=teste&password=123456
-      api
-        .post("/login", { username, password })
-        .then((response) => {
-          console.log(response);
-
-          if (response.data.success === true) {
-            navigation.navigate("Home");
-            setPassword("");
-            setUsername("");
-          } else {
-            Alert.alert(response.data.msg, "Tente novamente");
-          }
-        })
-        .catch(() => Alert.alert("Erro no envio", "Tente novamente"))
-        .finally(() => {
-          setLoading(false);
-        });
+      SendToEndpoint();
 
       return;
     }
-
-    //
   }
-
-  function HandleTestFunction() {
+  function SendToEndpoint() {
     api
-      .get("/categories")
-      .then((response) => console.log(response.data))
-      .catch((error) => console.log(error))
-      .finally(() => alert("Requisição terminada"));
-
-    // api
-    //   .post("/login", { username: "teste", password: "123456" })
-    //   .then((response) => console.log(response))
-    //   .catch((error) => console.log(error));
+      .post("/login", { username, password })
+      .then((response) => {
+        if (response.data.success === true) {
+          navigation.navigate("Home");
+          setPassword("");
+          setUsername("");
+        } else {
+          Alert.alert(response.data.msg, "Tente novamente");
+        }
+      })
+      .catch(() => Alert.alert("Erro no envio", "Tente novamente"))
+      .finally(() => {
+        setLoading(false);
+      });
   }
 
   return (
