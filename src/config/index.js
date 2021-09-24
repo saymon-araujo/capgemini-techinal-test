@@ -14,6 +14,9 @@ export const colors = {
   dark: "#333333",
   white: "#ffffff",
 
+  shadow: "rgba(52, 52, 52, 0.1)",
+  shadow_dark: "rgba(52, 52, 52, 0.5)",
+
   background: "#f4f4f4",
   background_dark: "#f8f8f8",
 

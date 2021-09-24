@@ -9,6 +9,9 @@ import {
   ActivityIndicator,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import { useNetInfo } from "@react-native-community/netinfo";
+
 import {
   getStatusBarHeight,
   getBottomSpace,
@@ -26,19 +29,24 @@ import { ProductCard } from "../components/ProductCard";
 
 export function Home() {
   const navigation = useNavigation();
+  const netInfo = useNetInfo();
 
   const [categories, setCategories] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
   const [products, setProducts] = useState([]);
   const [textForSearch, setTextForSearch] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+
+  const [categoriesIsLoading, setCategoriesIsLoading] = useState(true);
+  const [productsIsLoading, setProductsIsLoading] = useState(true);
 
   useEffect(() => {
     api
       .get("/categories")
       .then((response) => {
         setCategories(response.data);
+        setCategoriesIsLoading(false);
       })
       .catch(() => {})
       .finally(() => {});
@@ -48,16 +56,40 @@ export function Home() {
       .then((response) => {
         setProducts(response.data);
         setAllProducts(response.data);
+        setProductsIsLoading(false);
       })
       .catch(() => {})
       .finally(() => {});
   }, []);
 
+  useEffect(() => {
+    if (netInfo.isInternetReachable) {
+      api
+        .get("/categories")
+        .then((response) => {
+          setCategories(response.data);
+          setCategoriesIsLoading(false);
+        })
+        .catch(() => {})
+        .finally(() => {});
+
+      api
+        .get("/products")
+        .then((response) => {
+          setProducts(response.data);
+          setAllProducts(response.data);
+          setProductsIsLoading(false);
+        })
+        .catch(() => {})
+        .finally(() => {});
+    }
+  }, [netInfo.isInternetReachable]);
+
   function Logout() {
     navigation.navigate("Login");
   }
   function SearchForProduct() {
-    setLoading(true);
+    setSearchLoading(true);
     setSelectedId(null);
     DeselectCategory();
 
@@ -70,7 +102,7 @@ export function Home() {
         })
         .catch((error) => {})
         .finally(() => {
-          setLoading(false);
+          setSearchLoading(false);
         });
     } else {
       api
@@ -81,7 +113,7 @@ export function Home() {
         })
         .catch(() => {})
         .finally(() => {
-          setLoading(false);
+          setSearchLoading(false);
         });
     }
   }
@@ -108,27 +140,77 @@ export function Home() {
       <View>
         <Text style={styles.categoriesTitle}>Categorias</Text>
 
-        <FlatList
-          data={categories}
-          keyExtractor={(item) => String(item.id)}
-          showsHorizontalScrollIndicator={false}
-          horizontal={true}
-          contentContainerStyle={styles.categoryFlatlist}
-          renderItem={({ item }) => (
-            <CategoryCard
-              item={item}
-              selectCategory={(id) => {
-                SelectCategory(id);
-                setSelectedId(id);
-              }}
-              deselectCategory={() => {
-                setSelectedId(null);
-                DeselectCategory();
-              }}
-              selectedId={selectedId}
-            />
-          )}
-        />
+        {categoriesIsLoading ? (
+          <View style={{ flexDirection: "row" }}>
+            <View style={styles.containerItem}>
+              <SkeletonPlaceholder
+                backgroundColor={colors.text_light}
+                speed={1000}
+              >
+                <View
+                  style={{
+                    width: W / 4.5,
+                    height: RFValue(15),
+                    borderRadius: 4,
+                    alignSelf: "center",
+                  }}
+                />
+              </SkeletonPlaceholder>
+            </View>
+            <View style={styles.containerItem}>
+              <SkeletonPlaceholder
+                backgroundColor={colors.text_light}
+                speed={1000}
+              >
+                <View
+                  style={{
+                    width: W / 4.5,
+                    height: RFValue(15),
+                    borderRadius: 4,
+                    alignSelf: "center",
+                  }}
+                />
+              </SkeletonPlaceholder>
+            </View>
+            <View style={styles.containerItem}>
+              <SkeletonPlaceholder
+                backgroundColor={colors.text_light}
+                speed={1000}
+              >
+                <View
+                  style={{
+                    width: W / 4.5,
+                    height: RFValue(15),
+                    borderRadius: 4,
+                    alignSelf: "center",
+                  }}
+                />
+              </SkeletonPlaceholder>
+            </View>
+          </View>
+        ) : (
+          <FlatList
+            data={categories}
+            keyExtractor={(item) => String(item.id)}
+            showsHorizontalScrollIndicator={false}
+            horizontal={true}
+            contentContainerStyle={styles.categoryFlatlist}
+            renderItem={({ item }) => (
+              <CategoryCard
+                item={item}
+                selectCategory={(id) => {
+                  SelectCategory(id);
+                  setSelectedId(id);
+                }}
+                deselectCategory={() => {
+                  setSelectedId(null);
+                  DeselectCategory();
+                }}
+                selectedId={selectedId}
+              />
+            )}
+          />
+        )}
 
         <View style={styles.searchInputContainer}>
           <Icon
@@ -149,7 +231,7 @@ export function Home() {
             onChangeText={setTextForSearch}
             onBlur={() => Keyboard.dismiss()}
           />
-          {loading && (
+          {searchLoading && (
             <ActivityIndicator
               color={colors.primary_light}
               style={styles.loading}
@@ -160,18 +242,68 @@ export function Home() {
         <View style={styles.productsContainer}>
           <Text style={styles.productTitle}>Produtos</Text>
 
-          <FlatList
-            data={products}
-            keyExtractor={(item) => String(item.id)}
-            numColumns={2}
-            columnWrapperStyle={{
-              justifyContent: "space-evenly",
-              width: W,
-            }}
-            contentContainerStyle={styles.productsFlatlist}
-            showsHorizontalScrollIndicator={false}
-            renderItem={({ item }) => <ProductCard item={item} />}
-          />
+          {productsIsLoading ? (
+            <FlatList
+              data={[1, 2, 3, 4]}
+              keyExtractor={(index) => String(index)}
+              numColumns={2}
+              columnWrapperStyle={{
+                justifyContent: "space-evenly",
+                width: W,
+              }}
+              contentContainerStyle={styles.productsFlatlist}
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <View style={styles.containerProduct}>
+                  <SkeletonPlaceholder
+                    backgroundColor={colors.text_light}
+                    speed={1000}
+                  >
+                    <View
+                      style={{
+                        width: W / 4,
+                        height: RFValue(15),
+                        borderRadius: 4,
+                        alignSelf: "center",
+                      }}
+                    />
+                  </SkeletonPlaceholder>
+
+                  <SkeletonPlaceholder
+                    backgroundColor={colors.text_light}
+                    speed={1000}
+                  >
+                    <View
+                      style={{
+                        width: W / 8,
+                        height: RFValue(15),
+                        borderRadius: 4,
+                        alignSelf: "flex-end",
+
+                        position: "absolute",
+
+                        bottom: W / 5,
+                        right: 20,
+                      }}
+                    />
+                  </SkeletonPlaceholder>
+                </View>
+              )}
+            />
+          ) : (
+            <FlatList
+              data={products}
+              keyExtractor={(item) => String(item.id)}
+              numColumns={2}
+              columnWrapperStyle={{
+                justifyContent: "space-evenly",
+                width: W,
+              }}
+              contentContainerStyle={styles.productsFlatlist}
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item }) => <ProductCard item={item} />}
+            />
+          )}
         </View>
       </View>
     </View>
@@ -193,20 +325,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: getStatusBarHeight(),
 
-    // shadowColor: "#000",
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 5,
-    // },
-    // shadowOpacity: 0.34,
-    // shadowRadius: 6.27,
+    shadowColor: colors.dark,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
 
-    // elevation: 6,
+    elevation: 8,
   },
   headerTitle: {
     color: colors.white,
     fontSize: RFValue(25),
-    paddingLeft: 20,
+    paddingLeft: 10,
   },
   categoriesTitle: {
     color: colors.primary,
@@ -266,5 +398,26 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 20,
     alignSelf: "center",
+  },
+
+  containerItem: {
+    backgroundColor: colors.dark,
+    height: W / 3,
+    width: W / 3,
+    marginLeft: 20,
+
+    alignItems: "center",
+    justifyContent: "flex-end",
+    borderRadius: 14,
+    paddingBottom: 5,
+  },
+  containerProduct: {
+    backgroundColor: colors.dark,
+    height: W / 2.3,
+    width: W / 2.3,
+    marginVertical: 20,
+
+    borderRadius: 20,
+    padding: 5,
   },
 });

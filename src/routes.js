@@ -21,7 +21,6 @@ function MainStack() {
         options={{ headerShown: false }}
         component={Home}
       />
-
       <Stack.Screen
         name="Details"
         options={{ headerShown: false }}
