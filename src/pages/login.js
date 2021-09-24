@@ -1,14 +1,14 @@
 import React, { useState, createRef } from "react";
 import {
-  Alert,
   Text,
-  StyleSheet,
-  TouchableWithoutFeedback,
-  ActivityIndicator,
+  Alert,
   Image,
-  TextInput,
   Keyboard,
+  TextInput,
+  StyleSheet,
+  ActivityIndicator,
   KeyboardAvoidingView,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import { RectButton } from "react-native-gesture-handler";
@@ -37,7 +37,6 @@ export function Login() {
       Keyboard.dismiss();
       setLoading(true);
       SendToEndpoint();
-
       return;
     }
   }
@@ -127,12 +126,9 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     paddingLeft: 20,
     color: colors.text,
-
     borderRadius: 10,
-
     elevation: 6,
-
-    shadowColor: "#000",
+    shadowColor: colors.dark,
     shadowOffset: {
       width: 0,
       height: 3,
@@ -145,19 +141,15 @@ const styles = StyleSheet.create({
     width: W * 0.8,
     height: H / 15,
     marginTop: 30,
-
     borderRadius: 10,
-
     elevation: 6,
-
-    shadowColor: "#000",
+    shadowColor: colors.dark,
     shadowOffset: {
       width: 0,
       height: 3,
     },
     shadowOpacity: 0.27,
     shadowRadius: 4.65,
-
     justifyContent: "center",
   },
   loginButtonText: {

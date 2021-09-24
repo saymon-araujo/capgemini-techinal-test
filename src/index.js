@@ -3,7 +3,6 @@ import React from "react";
 import { StatusBar } from "react-native";
 
 import Routes from "./routes";
-
 import { colors } from "./config";
 
 export default function App() {

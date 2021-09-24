@@ -1,9 +1,9 @@
 import React from "react";
-import { Text, View, StyleSheet } from "react-native";
-
-import { RFValue } from "react-native-responsive-fontsize";
-import { colors, W } from "../../config";
+import { Text, StyleSheet } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
+import { RFValue } from "react-native-responsive-fontsize";
+
+import { colors, W } from "../../config";
 
 export function CategoryCard({
   item,
@@ -18,6 +18,7 @@ export function CategoryCard({
       selectCategory(item.id);
     }
   }
+
   return (
     <RectButton style={styles.container} onPress={verifyIfIsSelected}>
       <Text
@@ -40,7 +41,6 @@ const styles = StyleSheet.create({
     height: W / 3,
     width: W / 3,
     marginLeft: 20,
-
     alignItems: "center",
     justifyContent: "flex-end",
     borderRadius: 14,

@@ -2,46 +2,55 @@ import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
-  StyleSheet,
-  TextInput,
   Keyboard,
   FlatList,
+  TextInput,
+  StyleSheet,
   ActivityIndicator,
 } from "react-native";
+import { useNavigation } from "@react-navigation/core";
+import { RFValue } from "react-native-responsive-fontsize";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import { useNetInfo } from "@react-native-community/netinfo";
-
+import { BorderlessButton } from "react-native-gesture-handler";
 import {
-  getStatusBarHeight,
   getBottomSpace,
+  getStatusBarHeight,
 } from "react-native-iphone-x-helper";
 
-import { useNavigation } from "@react-navigation/core";
-
-import { RFValue } from "react-native-responsive-fontsize";
-import { colors, W, H } from "../config";
-import { BorderlessButton } from "react-native-gesture-handler";
 import api from "../services/api";
-
-import { CategoryCard } from "../components/CategoryCard";
+import { colors, W, H } from "../config";
 import { ProductCard } from "../components/ProductCard";
+import { CategoryCard } from "../components/CategoryCard";
+import { SkeletonCategoryCards } from "../components/SkeletonCategoryCards";
+import { SkeletonProductCard } from "../components/SkeletonProductCard";
 
 export function Home() {
   const navigation = useNavigation();
   const netInfo = useNetInfo();
 
+  const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
-  const [products, setProducts] = useState([]);
+  const [selectedId, setSelectedId] = useState(null);
   const [textForSearch, setTextForSearch] = useState("");
   const [searchLoading, setSearchLoading] = useState(false);
-  const [selectedId, setSelectedId] = useState(null);
-
-  const [categoriesIsLoading, setCategoriesIsLoading] = useState(true);
   const [productsIsLoading, setProductsIsLoading] = useState(true);
+  const [categoriesIsLoading, setCategoriesIsLoading] = useState(true);
 
   useEffect(() => {
+    SearchDataInApi();
+  }, []);
+  useEffect(() => {
+    if (netInfo.isInternetReachable) {
+      SearchDataInApi();
+    }
+  }, [netInfo.isInternetReachable]);
+
+  function Logout() {
+    navigation.navigate("Login");
+  }
+  function SearchDataInApi() {
     api
       .get("/categories")
       .then((response) => {
@@ -60,33 +69,6 @@ export function Home() {
       })
       .catch(() => {})
       .finally(() => {});
-  }, []);
-
-  useEffect(() => {
-    if (netInfo.isInternetReachable) {
-      api
-        .get("/categories")
-        .then((response) => {
-          setCategories(response.data);
-          setCategoriesIsLoading(false);
-        })
-        .catch(() => {})
-        .finally(() => {});
-
-      api
-        .get("/products")
-        .then((response) => {
-          setProducts(response.data);
-          setAllProducts(response.data);
-          setProductsIsLoading(false);
-        })
-        .catch(() => {})
-        .finally(() => {});
-    }
-  }, [netInfo.isInternetReachable]);
-
-  function Logout() {
-    navigation.navigate("Login");
   }
   function SearchForProduct() {
     setSearchLoading(true);
@@ -139,55 +121,8 @@ export function Home() {
 
       <View>
         <Text style={styles.categoriesTitle}>Categorias</Text>
-
         {categoriesIsLoading ? (
-          <View style={{ flexDirection: "row" }}>
-            <View style={styles.containerItem}>
-              <SkeletonPlaceholder
-                backgroundColor={colors.text_light}
-                speed={1000}
-              >
-                <View
-                  style={{
-                    width: W / 4.5,
-                    height: RFValue(15),
-                    borderRadius: 4,
-                    alignSelf: "center",
-                  }}
-                />
-              </SkeletonPlaceholder>
-            </View>
-            <View style={styles.containerItem}>
-              <SkeletonPlaceholder
-                backgroundColor={colors.text_light}
-                speed={1000}
-              >
-                <View
-                  style={{
-                    width: W / 4.5,
-                    height: RFValue(15),
-                    borderRadius: 4,
-                    alignSelf: "center",
-                  }}
-                />
-              </SkeletonPlaceholder>
-            </View>
-            <View style={styles.containerItem}>
-              <SkeletonPlaceholder
-                backgroundColor={colors.text_light}
-                speed={1000}
-              >
-                <View
-                  style={{
-                    width: W / 4.5,
-                    height: RFValue(15),
-                    borderRadius: 4,
-                    alignSelf: "center",
-                  }}
-                />
-              </SkeletonPlaceholder>
-            </View>
-          </View>
+          <SkeletonCategoryCards />
         ) : (
           <FlatList
             data={categories}
@@ -243,62 +178,13 @@ export function Home() {
           <Text style={styles.productTitle}>Produtos</Text>
 
           {productsIsLoading ? (
-            <FlatList
-              data={[1, 2, 3, 4]}
-              keyExtractor={(index) => String(index)}
-              numColumns={2}
-              columnWrapperStyle={{
-                justifyContent: "space-evenly",
-                width: W,
-              }}
-              contentContainerStyle={styles.productsFlatlist}
-              showsHorizontalScrollIndicator={false}
-              renderItem={({ item }) => (
-                <View style={styles.containerProduct}>
-                  <SkeletonPlaceholder
-                    backgroundColor={colors.text_light}
-                    speed={1000}
-                  >
-                    <View
-                      style={{
-                        width: W / 4,
-                        height: RFValue(15),
-                        borderRadius: 4,
-                        alignSelf: "center",
-                      }}
-                    />
-                  </SkeletonPlaceholder>
-
-                  <SkeletonPlaceholder
-                    backgroundColor={colors.text_light}
-                    speed={1000}
-                  >
-                    <View
-                      style={{
-                        width: W / 8,
-                        height: RFValue(15),
-                        borderRadius: 4,
-                        alignSelf: "flex-end",
-
-                        position: "absolute",
-
-                        bottom: W / 5,
-                        right: 20,
-                      }}
-                    />
-                  </SkeletonPlaceholder>
-                </View>
-              )}
-            />
+            <SkeletonProductCard />
           ) : (
             <FlatList
               data={products}
               keyExtractor={(item) => String(item.id)}
               numColumns={2}
-              columnWrapperStyle={{
-                justifyContent: "space-evenly",
-                width: W,
-              }}
+              columnWrapperStyle={styles.columnStyle}
               contentContainerStyle={styles.productsFlatlist}
               showsHorizontalScrollIndicator={false}
               renderItem={({ item }) => <ProductCard item={item} />}
@@ -324,7 +210,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
     paddingTop: getStatusBarHeight(),
-
     shadowColor: colors.dark,
     shadowOffset: {
       width: 0,
@@ -332,7 +217,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.27,
     shadowRadius: 4.65,
-
     elevation: 8,
   },
   headerTitle: {
@@ -356,13 +240,10 @@ const styles = StyleSheet.create({
     width: W - 40,
     height: H / 15,
     marginVertical: 10,
-
     marginVertical: 40,
-
     borderRadius: 14,
     borderColor: colors.border,
     borderWidth: 1,
-
     alignSelf: "center",
     flexDirection: "row",
   },
@@ -379,7 +260,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     width: W,
     height: H / 2,
-
     borderTopLeftRadius: W / 5,
     borderTopRightRadius: W / 5,
   },
@@ -399,25 +279,8 @@ const styles = StyleSheet.create({
     right: 20,
     alignSelf: "center",
   },
-
-  containerItem: {
-    backgroundColor: colors.dark,
-    height: W / 3,
-    width: W / 3,
-    marginLeft: 20,
-
-    alignItems: "center",
-    justifyContent: "flex-end",
-    borderRadius: 14,
-    paddingBottom: 5,
-  },
-  containerProduct: {
-    backgroundColor: colors.dark,
-    height: W / 2.3,
-    width: W / 2.3,
-    marginVertical: 20,
-
-    borderRadius: 20,
-    padding: 5,
+  columnStyle: {
+    justifyContent: "space-evenly",
+    width: W,
   },
 });

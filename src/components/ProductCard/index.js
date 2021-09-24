@@ -1,19 +1,16 @@
 import React from "react";
 import { Text, StyleSheet } from "react-native";
-
-import { RFValue } from "react-native-responsive-fontsize";
-import { colors, W } from "../../config";
-import { RectButton } from "react-native-gesture-handler";
-
 import { useNavigation } from "@react-navigation/core";
+import { RectButton } from "react-native-gesture-handler";
+import { RFValue } from "react-native-responsive-fontsize";
 
-export function ProductCard(item) {
-  let data = item.item;
+import { colors, W } from "../../config";
 
+export function ProductCard({ item }) {
   const navigation = useNavigation();
 
   function HandleNavigateToDetailsOfProduct() {
-    navigation.navigate("Details", { data });
+    navigation.navigate("Details", { item });
   }
 
   return (
@@ -21,8 +18,8 @@ export function ProductCard(item) {
       style={styles.container}
       onPress={HandleNavigateToDetailsOfProduct}
     >
-      <Text style={styles.title}>{data.name}</Text>
-      <Text style={styles.price}>R$ {data.price}</Text>
+      <Text style={styles.title}>{item.name}</Text>
+      <Text style={styles.price}>R$ {item.price}</Text>
     </RectButton>
   );
 }
@@ -33,7 +30,6 @@ const styles = StyleSheet.create({
     height: W / 2.3,
     width: W / 2.3,
     marginVertical: 20,
-
     borderRadius: 20,
     padding: 5,
   },

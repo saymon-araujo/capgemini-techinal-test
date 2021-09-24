@@ -1,30 +1,25 @@
 import React from "react";
-import { View, StyleSheet, Text, ImageBackground } from "react-native";
-
+import Icon from "react-native-vector-icons/MaterialIcons";
 import { RFValue } from "react-native-responsive-fontsize";
-import { colors, W, H } from "../config";
-import { BorderlessButton, RectButton } from "react-native-gesture-handler";
-
 import { useNavigation, useRoute } from "@react-navigation/core";
-
+import { View, StyleSheet, Text, ImageBackground } from "react-native";
+import { BorderlessButton, RectButton } from "react-native-gesture-handler";
 import {
   getStatusBarHeight,
   getBottomSpace,
 } from "react-native-iphone-x-helper";
 
-import Icon from "react-native-vector-icons/MaterialIcons";
+import { colors, W, H } from "../config";
 
 export function Details() {
   const navigation = useNavigation();
   const route = useRoute();
-
-  const data = route.params.data;
-
-  console.log(data);
+  const data = route.params.item;
 
   function HandleGoBack() {
     navigation.goBack();
   }
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -80,9 +75,7 @@ const styles = StyleSheet.create({
     width: W,
     paddingTop: getStatusBarHeight(),
     backgroundColor: colors.dark,
-
     elevation: 10,
-
     justifyContent: "flex-end",
   },
   goBackButton: {
@@ -99,7 +92,6 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     justifyContent: "space-evenly",
-    // alignSelf: "center",
   },
   productInfoContainer: {
     flexDirection: "row",

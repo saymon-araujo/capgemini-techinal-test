@@ -2,8 +2,8 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import { Login } from "./pages/login";
 import { Home } from "./pages/home";
+import { Login } from "./pages/login";
 import { Details } from "./pages/details";
 
 const Stack = createStackNavigator();
