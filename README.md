@@ -36,23 +36,14 @@
 Esse projeto foi desenvolvido utilizando as seguintes tecnologias:
 
 - [React Native](https://reactnative.dev/docs/getting-started)
-
 - [Axios](https://github.com/axios/axios)
-
 - [React Navigation](https://reactnavigation.org/docs/getting-started)
-
 - [React Native NetInfo](https://www.npmjs.com/package/@react-native-community/netinfo)
-
 - [React Native Vector Icons](https://github.com/oblador/react-native-vector-icons)
-
 - [React Native Responsive Fontsize](https://www.npmjs.com/package/react-native-responsive-fontsize)
-
 - [React Native Gesture Handler](https://docs.swmansion.com/react-native-gesture-handler/docs/)
-
 - [React Native Iphone X Helper](https://github.com/ptelad/react-native-iphone-x-helper)
-
 - [React Native Skeleton Placeholder](https://www.npmjs.com/package/react-native-skeleton-placeholder)
-
 - [VS Code](https://code.visualstudio.com/)
   <br>
   <br>
