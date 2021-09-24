@@ -11,17 +11,16 @@ const Stack = createStackNavigator();
 function MainStack() {
   return (
     <Stack.Navigator>
+     <Stack.Screen
+        name="Login"
+        options={{ headerShown: false }}
+        component={Login}
+      />
       <Stack.Screen
         name="Home"
         options={{ headerShown: false }}
         component={Home}
       />
-      <Stack.Screen
-        name="Login"
-        options={{ headerShown: false }}
-        component={Login}
-      />
-
       <Stack.Screen
         name="Details"
         options={{ headerShown: false }}
