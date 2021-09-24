@@ -9,10 +9,10 @@
 </p>
 
 <p align="center">
- <a href="# white_check_mark-features">Features</a> • 
- <a href="# hammer_and_pick-tecnologias">Tecnologias</a> • 
- <a href="# information_source-como-usar">Como usar</a> • 
- <a href="# memo-licença">Licença</a>
+ <a href="#white_check_mark-features">Features</a> • 
+ <a href="#hammer_and_pick-tecnologias">Tecnologias</a> • 
+ <a href="#information_source-como-usar">Como usar</a> • 
+ <a href="#memo-licença">Licença</a>
 </p>
 
 <br>
