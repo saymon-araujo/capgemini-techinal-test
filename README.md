@@ -2,7 +2,7 @@
     <img alt="CapgeminiTest" title="#banner" src="./src/assets/demo/banner.png" />
 </h1>
 
-<h3 align="center">📱 Segunda questão do teste de seletiva para desenvolvedor React Native na Capgemini</h3>
+<h3 align="center">📱 Segunda questão do teste para desenvolvedor React Native na Capgemini</h3>
 
 <p align="center">
   <img alt="License" src="https://img.shields.io/badge/license-MIT-brightgreen">
@@ -59,6 +59,8 @@ Esse projeto foi desenvolvido utilizando as seguintes tecnologias:
 
 # :information_source: Como usar
 
+Para executar o aplicativo, você precisará ter o [ambiente de desenvolvimento](https://reactnative.dev/docs/environment-setup) _(React Native CLI)_ configurado tanto para Android quanto para iOS em sua máquina. Caso já tenha configurado o seu, basta seguir os passos:
+
 ```bash
 # Clone esse repositório
 $ git clone https://github.com/saymon-araujo/capgemini-techinal-test
@@ -68,6 +70,7 @@ $ cd capgemini-techinal-test
 
 # Instale as dependencias
 $ npm install
+$ cd ios && pod install && cd ..
 
 # Execute o app (Android)
 $ yarn android

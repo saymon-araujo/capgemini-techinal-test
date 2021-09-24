@@ -72,6 +72,7 @@ export function Home() {
   }
   function SearchForProduct() {
     setSearchLoading(true);
+
     setSelectedId(null);
     DeselectCategory();
 
@@ -79,10 +80,15 @@ export function Home() {
       api
         .get(`/products?search=${textForSearch.toLowerCase()}`)
         .then((response) => {
-          setProducts(response.data);
-          setAllProducts(response.data);
+          if (Array.isArray(response.data) === true) {
+            setProducts(response.data);
+          } else {
+            let transformObjectResponseInArray = Object.values(response.data);
+
+            setProducts(transformObjectResponseInArray);
+          }
         })
-        .catch((error) => {})
+        .catch(() => {})
         .finally(() => {
           setSearchLoading(false);
         });
@@ -90,8 +96,15 @@ export function Home() {
       api
         .get("/products")
         .then((response) => {
-          setProducts(response.data);
-          setAllProducts(response.data);
+          if (Array.isArray(response.data) === true) {
+            setProducts(response.data);
+          } else {
+            let transformObjectResponseInArray = Array.of(
+              Object.entries(response.data)[0][1]
+            );
+
+            setProducts(transformObjectResponseInArray);
+          }
         })
         .catch(() => {})
         .finally(() => {
@@ -181,7 +194,7 @@ export function Home() {
             <SkeletonProductCard />
           ) : (
             <FlatList
-              data={products}
+              data={Array.isArray(products) === true ? products : []}
               keyExtractor={(item) => String(item.id)}
               numColumns={2}
               columnWrapperStyle={styles.columnStyle}
