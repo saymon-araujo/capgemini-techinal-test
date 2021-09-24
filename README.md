@@ -68,7 +68,6 @@ $ cd capgemini-techinal-test
 
 # Instale as dependencias
 $ npm install
-$ yarn add
 
 # Execute o app (Android)
 $ yarn android
