@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img alt="CapgeminiTest" title="#CapgeminiTest" src="./src/assets/demo/banner.png" />
+    <img alt="CapgeminiTest" title="#banner" src="./src/assets/demo/banner.png" />
 </h1>
 
 <h3 align="center">📱 Segunda questão do teste de seletiva para desenvolvedor React Native na Capgemini</h3>
@@ -9,16 +9,16 @@
 </p>
 
 <p align="center">
- <a href="# ✅ Features">Features</a> • 
- <a href="# ⚒️ Tecnologias">Tecnologias</a> • 
- <a href="# ℹ️ Como usar">Como usar</a> • 
- <a href="# 📝 Licença">Licença</a>
+ <a href="# white_check_mark-features">Features</a> • 
+ <a href="# hammer_and_pick-tecnologias">Tecnologias</a> • 
+ <a href="# information_source-como-usar">Como usar</a> • 
+ <a href="# memo-licença">Licença</a>
 </p>
 
 <br>
 <br>
 
-# ✅ Features
+# :white_check_mark: Features
 
 - [x] Login/Logout
 - [x] Listagem de produtos
@@ -26,13 +26,12 @@
 - [x] Detalhes do produto
 
 <p align="center">
-  <img alt="Demo on Netlify" src="./src/assets/demo/preview.gif">
+  <img  src="./src/assets/demo/preview.gif">
 </p>
 
 <br>
-<br>
 
-# ⚒️ Tecnologias
+# :hammer_and_pick: Tecnologias
 
 Esse projeto foi desenvolvido utilizando as seguintes tecnologias:
 
@@ -58,24 +57,24 @@ Esse projeto foi desenvolvido utilizando as seguintes tecnologias:
   <br>
   <br>
 
-# ℹ️ Como usar
+# :information_source: Como usar
 
 ```bash
 # Clone esse repositório
 $ git clone https://github.com/saymon-araujo/capgemini-techinal-test
 
-# Navegue até o repositório
+# Navegue até a pasta do repositório
 $ cd capgemini-techinal-test
 
 # Instale as dependencias
 $ npm install
 $ yarn add
 
-# Execute o app (iOS)
-$ yarn ios
-
 # Execute o app (Android)
 $ yarn android
+
+# Execute o app (iOS)
+$ yarn ios
 
 # Login
  Email: teste
@@ -85,7 +84,7 @@ $ yarn android
 <br>
 <br>
 
-# 📝 Licença
+# :memo: Licença
 
 Esse projeto está sobre a licença MIT. Veja a [LICENÇA](https://github.com/saymon-araujo/capgemini-techinal-test/blob/main/LICENSE) para mais informações.
 
