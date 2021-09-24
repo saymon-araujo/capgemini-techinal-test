@@ -1,16 +1,35 @@
 import React from "react";
-import { Text, StyleSheet } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 
 import { RFValue } from "react-native-responsive-fontsize";
 import { colors, W } from "../../config";
 import { RectButton } from "react-native-gesture-handler";
 
-export function CategoryCard(item) {
-  let data = item.item;
-
+export function CategoryCard({
+  item,
+  selectCategory,
+  deselectCategory,
+  selectedId,
+}) {
+  function verifyIfIsSelected() {
+    if (selectedId === item.id) {
+      deselectCategory();
+    } else {
+      selectCategory(item.id);
+    }
+  }
   return (
-    <RectButton style={styles.container}>
-      <Text style={styles.title}>{data.name}</Text>
+    <RectButton style={styles.container} onPress={verifyIfIsSelected}>
+      <Text
+        style={[
+          styles.title,
+          selectedId === item.id
+            ? { color: colors.primary, paddingBottom: 2 }
+            : {},
+        ]}
+      >
+        {item.name}
+      </Text>
     </RectButton>
   );
 }

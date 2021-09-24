@@ -5,8 +5,8 @@ import {
   StyleSheet,
   TextInput,
   Keyboard,
-  TouchableWithoutFeedback,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import {
@@ -28,7 +28,11 @@ export function Home() {
   const navigation = useNavigation();
 
   const [categories, setCategories] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
   const [products, setProducts] = useState([]);
+  const [textForSearch, setTextForSearch] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
   useEffect(() => {
     api
@@ -43,6 +47,7 @@ export function Home() {
       .get("/products")
       .then((response) => {
         setProducts(response.data);
+        setAllProducts(response.data);
       })
       .catch(() => {})
       .finally(() => {});
@@ -51,9 +56,47 @@ export function Home() {
   function Logout() {
     navigation.navigate("Login");
   }
+  function SearchForProduct() {
+    setLoading(true);
+    setSelectedId(null);
+    DeselectCategory();
+
+    if (textForSearch !== "") {
+      api
+        .get(`/products?search=${textForSearch.toLowerCase()}`)
+        .then((response) => {
+          setProducts(response.data);
+          setAllProducts(response.data);
+        })
+        .catch((error) => {})
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      api
+        .get("/products")
+        .then((response) => {
+          setProducts(response.data);
+          setAllProducts(response.data);
+        })
+        .catch(() => {})
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }
+  function SelectCategory(id) {
+    let productsFiltred = allProducts.filter(
+      (category) => category.category_id === id
+    );
+
+    setProducts(productsFiltred);
+  }
+  function DeselectCategory() {
+    setProducts(allProducts);
+  }
 
   return (
-    // <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Quitanda do Zé</Text>
@@ -71,7 +114,20 @@ export function Home() {
           showsHorizontalScrollIndicator={false}
           horizontal={true}
           contentContainerStyle={styles.categoryFlatlist}
-          renderItem={({ item }) => <CategoryCard item={item} />}
+          renderItem={({ item }) => (
+            <CategoryCard
+              item={item}
+              selectCategory={(id) => {
+                SelectCategory(id);
+                setSelectedId(id);
+              }}
+              deselectCategory={() => {
+                setSelectedId(null);
+                DeselectCategory();
+              }}
+              selectedId={selectedId}
+            />
+          )}
         />
 
         <View style={styles.searchInputContainer}>
@@ -86,9 +142,20 @@ export function Home() {
             placeholder="Buscar produtos..."
             placeholderTextColor={colors.border}
             returnKeyType="done"
+            value={textForSearch}
             underlineColorAndroid="transparent"
+            onSubmitEditing={() => SearchForProduct()}
+            multiline={false}
+            onChangeText={setTextForSearch}
             onBlur={() => Keyboard.dismiss()}
           />
+          {loading && (
+            <ActivityIndicator
+              color={colors.primary_light}
+              style={styles.loading}
+              size={RFValue(20)}
+            />
+          )}
         </View>
         <View style={styles.productsContainer}>
           <Text style={styles.productTitle}>Produtos</Text>
@@ -108,7 +175,6 @@ export function Home() {
         </View>
       </View>
     </View>
-    // </TouchableWithoutFeedback>
   );
 }
 
@@ -135,7 +201,7 @@ const styles = StyleSheet.create({
     // shadowOpacity: 0.34,
     // shadowRadius: 6.27,
 
-    elevation: 6,
+    // elevation: 6,
   },
   headerTitle: {
     color: colors.white,
@@ -195,7 +261,10 @@ const styles = StyleSheet.create({
   productsFlatlist: {
     alignSelf: "center",
     paddingBottom: 20,
-    // flex: 1,
-    // backgroundColor: "red",
+  },
+  loading: {
+    position: "absolute",
+    right: 20,
+    alignSelf: "center",
   },
 });
